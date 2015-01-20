@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+@SuppressWarnings("deprecation")
 public class FlashLiteActivity extends ActionBarActivity {
 	private static Camera cam;
 	private Button btn;
@@ -29,7 +30,6 @@ public class FlashLiteActivity extends ActionBarActivity {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void onClick(View v) {
 		if (getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_CAMERA_FLASH)) {
