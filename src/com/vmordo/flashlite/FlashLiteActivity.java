@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class FlashLiteActivity extends ActionBarActivity {
-	private Camera cam;
-
+	private static Camera cam;
+	private Button btn;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flash_lite);
+		btn = (Button) findViewById(R.id.button1);
 	}
 
 	@Override
@@ -37,11 +40,13 @@ public class FlashLiteActivity extends ActionBarActivity {
 				p.setFlashMode(Parameters.FLASH_MODE_TORCH);
 				cam.setParameters(p);
 				cam.startPreview();
+				btn.setText(R.string.flash_off);
 			} else {
 				Toast.makeText(this, "stop", Toast.LENGTH_SHORT).show();
 				cam.stopPreview();
 				cam.release();
 				cam = null;
+				btn.setText(R.string.flash_on);
 			}
 
 		} else
