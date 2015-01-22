@@ -103,6 +103,9 @@ public class FlashLiteActivity extends ActionBarActivity {
 	    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
 	    startActivityForResult(intent, REQUEST_CODE_PHOTO);
+
+	    Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    startActivityForResult(intent2, REQUEST_CODE_PHOTO);
 	  }
 
 	  public void onClickVideo(View view) {
