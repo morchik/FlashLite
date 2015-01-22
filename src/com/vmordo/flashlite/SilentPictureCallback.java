@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
 public class SilentPictureCallback implements Camera.PictureCallback {
@@ -23,14 +22,13 @@ public class SilentPictureCallback implements Camera.PictureCallback {
 			FileOutputStream os = new FileOutputStream(fln);
 			os.write(paramArrayOfByte);
 			os.close();
-			Toast.makeText(Cnt.get(), paramArrayOfByte.length + " hide " + fln,
-					Toast.LENGTH_LONG).show();
+			Log.e("onPictureTaken", paramArrayOfByte.length + " saved in " + fln);
+			//Toast.makeText(Cnt.get(), paramArrayOfByte.length + " hide " + fln,	Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Log.e("onPictureTaken", e.getMessage());
-			Toast.makeText(Cnt.get(), "Error " + e.getMessage(), Toast.LENGTH_LONG)
-					.show();
+			//Toast.makeText(Cnt.get(), "Error " + e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-		paramCamera.startPreview();
+		//paramCamera.startPreview();
 	}
 
 

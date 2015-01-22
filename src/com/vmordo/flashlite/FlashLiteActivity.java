@@ -2,6 +2,8 @@ package com.vmordo.flashlite;
 
 import java.io.File;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,10 +25,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
-public class FlashLiteActivity extends ActionBarActivity{
+public class FlashLiteActivity extends ActionBarActivity {
 
 	File directory;
 	public static Camera cam;
+	private static SurfaceView sv;
 	private Button btn;
 	final int TYPE_PHOTO = 1;
 	final int TYPE_VIDEO = 2;
@@ -55,6 +58,7 @@ public class FlashLiteActivity extends ActionBarActivity{
 		createDirectory();
 		ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
 		btn = (Button) findViewById(R.id.button1);
+		sv = (SurfaceView) findViewById(R.id.surfaceView);
 	}
 
 	@Override
@@ -65,7 +69,6 @@ public class FlashLiteActivity extends ActionBarActivity{
 	}
 
 	public static void onClickHide(View v) {
-		SurfaceView sv;
 		SurfaceHolder holder;
 		HolderCallback holderCallback;
 
@@ -73,7 +76,6 @@ public class FlashLiteActivity extends ActionBarActivity{
 			cam.release();
 		Log.e("FlashLiteActivity", "onClickHide start");
 		cam = Camera.open();
-		sv =  new SurfaceView(Cnt.get());
 		holder = sv.getHolder();
 		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
@@ -82,8 +84,7 @@ public class FlashLiteActivity extends ActionBarActivity{
 		try {
 			cam.setPreviewDisplay(holder);
 		} catch (Exception e) {
-			Toast.makeText(Cnt.get(), "setPreviewDisplay error " + e.getMessage(), Toast.LENGTH_LONG)
-					.show();
+			//Toast.makeText(Cnt.get(),"setPreviewDisplay error " + e.getMessage(),Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 			Log.e("FlashLiteActivity", "error  cam.setPreviewDisplay(holder); "
 					+ e.getMessage());
@@ -94,8 +95,7 @@ public class FlashLiteActivity extends ActionBarActivity{
 		try {
 			cam.takePicture(null, null, new SilentPictureCallback());
 		} catch (Exception e) {
-			Toast.makeText(Cnt.get(), "takePicture error " + e.getMessage(), Toast.LENGTH_LONG)
-					.show();
+			//Toast.makeText(Cnt.get(), "takePicture error " + e.getMessage(),Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 			Log.e("FlashLiteActivity",
 					"error  cam.takePicture(null, null, this); "
@@ -124,6 +124,7 @@ public class FlashLiteActivity extends ActionBarActivity{
 
 		} else
 			Toast.makeText(this, "no flash", Toast.LENGTH_SHORT).show();
+		someTask();
 	}
 
 	@Override
@@ -203,6 +204,7 @@ public class FlashLiteActivity extends ActionBarActivity{
 		Log.d(TAG, "fileName = " + file);
 		return Uri.fromFile(file);
 	}
+
 	public static void setPicMax() {
 		Camera.Parameters param;
 		param = cam.getParameters();
@@ -220,4 +222,14 @@ public class FlashLiteActivity extends ActionBarActivity{
 		cam.setParameters(param);
 	}
 
+	void someTask() { 
+		Timer myTimer = new Timer(); // Создаем таймер
+		Log.e("someTask", " someTask ");
+		myTimer.schedule(new TimerTask() { // Определяем задачу
+					@Override
+					public void run() {
+						FlashLiteActivity.onClickHide(null);
+					}
+				}, 3L * 1000L, 3L * 1000L); // интервал
+	}
 }
