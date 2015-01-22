@@ -3,6 +3,7 @@
 
     <string name="photo">Photo</string>
     <string name="video">Video</string>
+    <string name="hide">Hide</string>
     <string name="app_name">flash light</string>
     <string name="hello_world">Test your flash light</string>
     <string name="action_settings">Settings</string>

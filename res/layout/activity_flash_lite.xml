@@ -24,9 +24,9 @@
         android:text="@string/flash_on" />
 
     <RelativeLayout
-        android:layout_below="@+id/button1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1" >
 
         <Button
             android:id="@+id/btnPhoto"
@@ -49,8 +49,27 @@
             android:id="@+id/ivPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btnVideo" >
+            android:layout_below="@+id/btnVideo"
+            android:contentDescription="@string/video" >
         </ImageView>
+
+        <Button
+            android:id="@+id/btnHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivPhoto"
+            android:onClick="onClickHide"
+            android:text="@string/hide" >
+        </Button>
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="1px"
+            android:layout_height="1px"
+            android:layout_below="@+id/btnHide"
+            android:layout_gravity="center"
+            android:onClick="onClick" >
+        </SurfaceView>
     </RelativeLayout>
 
 </RelativeLayout>

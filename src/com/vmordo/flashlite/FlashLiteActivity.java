@@ -1,6 +1,7 @@
 package com.vmordo.flashlite;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
@@ -21,11 +22,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
-public class FlashLiteActivity extends ActionBarActivity {
+public class FlashLiteActivity extends ActionBarActivity implements Camera.PictureCallback {
+
+	File directory, directory2;
 	private static Camera cam;
 	private Button btn;
-
-	File directory;
 	final int TYPE_PHOTO = 1;
 	final int TYPE_VIDEO = 2;
 
@@ -50,6 +51,7 @@ public class FlashLiteActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flash_lite);
 		createDirectory();
+		createDirectory2();
 		ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
 		btn = (Button) findViewById(R.id.button1);
 	}
@@ -61,6 +63,16 @@ public class FlashLiteActivity extends ActionBarActivity {
 		return true;
 	}
 
+	public void onClickHide(View v) {
+		if (cam == null) {
+			Toast.makeText(this, "start", Toast.LENGTH_SHORT).show();
+			cam = Camera.open();
+			//cam.startPreview();
+		} else {
+			cam.takePicture(null, null, this);
+		}
+	}
+	
 	public void onClick(View v) {
 		if (getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_CAMERA_FLASH)) {
@@ -163,6 +175,35 @@ public class FlashLiteActivity extends ActionBarActivity {
 		}
 		Log.d(TAG, "fileName = " + file);
 		return Uri.fromFile(file);
+	}
+
+
+	@Override
+	public void onPictureTaken(byte[] paramArrayOfByte, Camera paramCamera) {
+		Log.e("onPictureTaken", "start");
+		try {
+			String fln = String.format(directory2.getPath() + "/h%d.jpg",
+					System.currentTimeMillis());
+			FileOutputStream os = new FileOutputStream(fln);
+			os.write(paramArrayOfByte);
+			os.close();
+			Toast.makeText(this, paramArrayOfByte.length + " hide " + fln,
+					Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
+			Log.e("onPictureTaken", e.getMessage());
+			Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_LONG)
+					.show();
+		}
+		//paramCamera.startPreview();
+	}
+
+	private void createDirectory2() {
+		directory2 = new File(
+				Environment
+						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+				"HideFolder");
+		if (!directory2.exists())
+			directory2.mkdirs();
 	}
 
 }
