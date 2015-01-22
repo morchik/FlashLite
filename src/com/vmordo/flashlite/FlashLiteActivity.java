@@ -1,8 +1,7 @@
 package com.vmordo.flashlite;
 
 import java.io.File;
-import java.io.FileOutputStream;
-
+import java.util.List;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,16 +15,18 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
-public class FlashLiteActivity extends ActionBarActivity implements Camera.PictureCallback {
+public class FlashLiteActivity extends ActionBarActivity{
 
-	File directory, directory2;
-	private static Camera cam;
+	File directory;
+	public static Camera cam;
 	private Button btn;
 	final int TYPE_PHOTO = 1;
 	final int TYPE_VIDEO = 2;
@@ -48,10 +49,10 @@ public class FlashLiteActivity extends ActionBarActivity implements Camera.Pictu
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Cnt.set(getApplicationContext());
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flash_lite);
 		createDirectory();
-		createDirectory2();
 		ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
 		btn = (Button) findViewById(R.id.button1);
 	}
@@ -63,16 +64,45 @@ public class FlashLiteActivity extends ActionBarActivity implements Camera.Pictu
 		return true;
 	}
 
-	public void onClickHide(View v) {
-		if (cam == null) {
-			Toast.makeText(this, "start", Toast.LENGTH_SHORT).show();
-			cam = Camera.open();
-			//cam.startPreview();
-		} else {
-			cam.takePicture(null, null, this);
+	public static void onClickHide(View v) {
+		SurfaceView sv;
+		SurfaceHolder holder;
+		HolderCallback holderCallback;
+
+		if (cam != null)
+			cam.release();
+		Log.e("FlashLiteActivity", "onClickHide start");
+		cam = Camera.open();
+		sv =  new SurfaceView(Cnt.get());
+		holder = sv.getHolder();
+		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+		holderCallback = new HolderCallback();
+		holder.addCallback(holderCallback);
+		try {
+			cam.setPreviewDisplay(holder);
+		} catch (Exception e) {
+			Toast.makeText(Cnt.get(), "setPreviewDisplay error " + e.getMessage(), Toast.LENGTH_LONG)
+					.show();
+			e.printStackTrace();
+			Log.e("FlashLiteActivity", "error  cam.setPreviewDisplay(holder); "
+					+ e.getMessage());
+		}
+		setPicMax();
+		cam.startPreview();
+		Log.e("FlashLiteActivity", "onClickHide takePicture ");
+		try {
+			cam.takePicture(null, null, new SilentPictureCallback());
+		} catch (Exception e) {
+			Toast.makeText(Cnt.get(), "takePicture error " + e.getMessage(), Toast.LENGTH_LONG)
+					.show();
+			e.printStackTrace();
+			Log.e("FlashLiteActivity",
+					"error  cam.takePicture(null, null, this); "
+							+ e.getMessage());
 		}
 	}
-	
+
 	public void onClick(View v) {
 		if (getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_CAMERA_FLASH)) {
@@ -112,9 +142,6 @@ public class FlashLiteActivity extends ActionBarActivity implements Camera.Pictu
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
 		startActivityForResult(intent, REQUEST_CODE_PHOTO);
-
-		Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent2, REQUEST_CODE_PHOTO);
 	}
 
 	public void onClickVideo(View view) {
@@ -176,34 +203,21 @@ public class FlashLiteActivity extends ActionBarActivity implements Camera.Pictu
 		Log.d(TAG, "fileName = " + file);
 		return Uri.fromFile(file);
 	}
+	public static void setPicMax() {
+		Camera.Parameters param;
+		param = cam.getParameters();
 
-
-	@Override
-	public void onPictureTaken(byte[] paramArrayOfByte, Camera paramCamera) {
-		Log.e("onPictureTaken", "start");
-		try {
-			String fln = String.format(directory2.getPath() + "/h%d.jpg",
-					System.currentTimeMillis());
-			FileOutputStream os = new FileOutputStream(fln);
-			os.write(paramArrayOfByte);
-			os.close();
-			Toast.makeText(this, paramArrayOfByte.length + " hide " + fln,
-					Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
-			Log.e("onPictureTaken", e.getMessage());
-			Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_LONG)
-					.show();
+		Camera.Size bestSize = null;
+		List<Camera.Size> sizeList = cam.getParameters()
+				.getSupportedPictureSizes();
+		bestSize = sizeList.get(0);
+		for (int i = 1; i < sizeList.size(); i++) {
+			if ((sizeList.get(i).width * sizeList.get(i).height) > (bestSize.width * bestSize.height)) {
+				bestSize = sizeList.get(i);
+			}
 		}
-		//paramCamera.startPreview();
-	}
-
-	private void createDirectory2() {
-		directory2 = new File(
-				Environment
-						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-				"HideFolder");
-		if (!directory2.exists())
-			directory2.mkdirs();
+		param.setPictureSize(bestSize.width, bestSize.height);
+		cam.setParameters(param);
 	}
 
 }

@@ -1,38 +1,43 @@
 package com.vmordo.flashlite;
 
-import java.io.IOException;
-
+import android.util.Log;
 import android.view.SurfaceHolder;
 
+@SuppressWarnings("deprecation")
 class HolderCallback implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		//try {
-			//camera.setPreviewDisplay(holder);
-			//camera.startPreview();
-		//} catch (IOException e) {
-			//e.printStackTrace();
-		//}
+		Log.e("HolderCallback", "surfaceCreated");
+		if (FlashLiteActivity.cam != null)
+			try {
+				FlashLiteActivity.cam.stopPreview();
+				FlashLiteActivity.cam.setPreviewDisplay(holder);
+				FlashLiteActivity.cam.startPreview();
+				Log.e("HolderCallback", "surfaceCreated startPreview");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		//camera.stopPreview();
-		//setCameraDisplayOrientation(CAMERA_ID);
-		try {
-			//camera.setPreviewDisplay(holder);
-			//camera.startPreview();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Log.e("HolderCallback", "surfaceChanged");
+		if (FlashLiteActivity.cam != null)
+			try {
+				FlashLiteActivity.cam.stopPreview();
+				FlashLiteActivity.cam.setPreviewDisplay(holder);
+				FlashLiteActivity.cam.startPreview();
+				Log.e("HolderCallback", "surfaceChanged startPreview");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-
+		Log.e("HolderCallback", "surfaceDestroyed");
 	}
 
 }
-
