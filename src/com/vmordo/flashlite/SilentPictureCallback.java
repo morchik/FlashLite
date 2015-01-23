@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 
 import android.hardware.Camera;
 import android.os.Environment;
-import android.util.Log;
 
 @SuppressWarnings("deprecation")
 public class SilentPictureCallback implements Camera.PictureCallback {

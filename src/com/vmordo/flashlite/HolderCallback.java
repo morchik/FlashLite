@@ -1,6 +1,5 @@
 package com.vmordo.flashlite;
 
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 @SuppressWarnings("deprecation")

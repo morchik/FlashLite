@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Looper;
-import android.util.Log;
 
 public class TrackingService extends Service {
 
