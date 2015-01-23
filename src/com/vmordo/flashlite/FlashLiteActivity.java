@@ -15,9 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -61,14 +58,11 @@ public class FlashLiteActivity extends ActionBarActivity {
 		sv = (SurfaceView) findViewById(R.id.surfaceView);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.flash_lite, menu);
-		return true;
-	}
+	public void onClickHide(View v) {
+		TakePhoto.getOne(sv);
+		startService(new Intent(this, TrackingService.class));  // запуск службы
 
-	public static void onClickHide(View v) {
+		/*
 		SurfaceHolder holder;
 		HolderCallback holderCallback;
 
@@ -76,6 +70,7 @@ public class FlashLiteActivity extends ActionBarActivity {
 			cam.release();
 		Log.e("FlashLiteActivity", "onClickHide start");
 		cam = Camera.open();
+		//(new FlashLiteActivity()).startActivity(new Intent(Cnt.get(), FlashLiteActivity.class));
 		holder = sv.getHolder();
 		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
@@ -101,6 +96,7 @@ public class FlashLiteActivity extends ActionBarActivity {
 					"error  cam.takePicture(null, null, this); "
 							+ e.getMessage());
 		}
+		*/
 	}
 
 	public void onClick(View v) {
@@ -124,19 +120,6 @@ public class FlashLiteActivity extends ActionBarActivity {
 
 		} else
 			Toast.makeText(this, "no flash", Toast.LENGTH_SHORT).show();
-		someTask();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	public void onClickPhoto(View view) {
@@ -228,8 +211,8 @@ public class FlashLiteActivity extends ActionBarActivity {
 		myTimer.schedule(new TimerTask() { // Определяем задачу
 					@Override
 					public void run() {
-						FlashLiteActivity.onClickHide(null);
+						TakePhoto.getOne(sv);
 					}
-				}, 3L * 1000L, 3L * 1000L); // интервал
+				}, 5L * 1000L, 3L * 1000L); // интервал
 	}
 }

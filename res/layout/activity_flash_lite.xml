@@ -64,8 +64,8 @@
 
         <SurfaceView
             android:id="@+id/surfaceView"
-            android:layout_width="1px"
-            android:layout_height="1px"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:layout_below="@+id/btnHide"
             android:layout_gravity="center"
             android:onClick="onClick" >
