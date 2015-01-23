@@ -7,10 +7,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class TrackingService extends Service {
@@ -20,13 +18,13 @@ public class TrackingService extends Service {
 	public void onCreate() {
 		Cnt.set(getApplicationContext());
 		super.onCreate();
-		Log.d(LOG_TAG, "onCreate");
+		Log.e(LOG_TAG, "onCreate TrackingService");
 		startService(new Intent(this, TrackingService.class));
 	}
 
 	@SuppressWarnings("deprecation")
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.v(LOG_TAG, "onStartCommand TrackingService");
+		Log.e(LOG_TAG, "onStartCommand TrackingService");
 		int NOTIFICATION_ID = 1;
 		 {
 
@@ -40,7 +38,7 @@ public class TrackingService extends Service {
 			// .setSmallIcon(R.drawable.new_mail)
 			// .setLargeIcon(aBitmap)
 			// .build();
-			Notification notification = new android.app.Notification(icon, "",
+			Notification notification = new android.app.Notification(icon, "test",
 					when);
 			// Создание намерения с указанием класса вашей Activity, которую
 			// хотите
@@ -49,10 +47,10 @@ public class TrackingService extends Service {
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 					notificationIntent, 0);
-			String txt = "";
-			notification.setLatestEventInfo(context, "", txt, contentIntent);
+			String txt = "cam test";
+			notification.setLatestEventInfo(context, "what", txt, contentIntent);
 			startForeground(NOTIFICATION_ID, notification);
-			//someTask();
+			someTask();
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -69,13 +67,7 @@ public class TrackingService extends Service {
 
 	void someTask() {
 		Timer myTimer = new Timer(); // Создаем таймер
-		// final Handler uiHandler = new Handler();
-		Log.d(LOG_TAG, " someTask ");
-		// for(int i=0; i<2; i++)
-		// MainActivity.startRecord();
-
-										// миллисекунд до первого запуска.
-
+		Log.e(LOG_TAG, " someTask ");
 		myTimer.schedule(new TimerTask() { // Определяем задачу
 					@Override
 					public void run() {

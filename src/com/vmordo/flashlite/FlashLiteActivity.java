@@ -59,44 +59,8 @@ public class FlashLiteActivity extends ActionBarActivity {
 	}
 
 	public void onClickHide(View v) {
-		TakePhoto.getOne(sv);
 		startService(new Intent(this, TrackingService.class));  // запуск службы
-
-		/*
-		SurfaceHolder holder;
-		HolderCallback holderCallback;
-
-		if (cam != null)
-			cam.release();
-		Log.e("FlashLiteActivity", "onClickHide start");
-		cam = Camera.open();
-		//(new FlashLiteActivity()).startActivity(new Intent(Cnt.get(), FlashLiteActivity.class));
-		holder = sv.getHolder();
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-		holderCallback = new HolderCallback();
-		holder.addCallback(holderCallback);
-		try {
-			cam.setPreviewDisplay(holder);
-		} catch (Exception e) {
-			//Toast.makeText(Cnt.get(),"setPreviewDisplay error " + e.getMessage(),Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-			Log.e("FlashLiteActivity", "error  cam.setPreviewDisplay(holder); "
-					+ e.getMessage());
-		}
-		setPicMax();
-		cam.startPreview();
-		Log.e("FlashLiteActivity", "onClickHide takePicture ");
-		try {
-			cam.takePicture(null, null, new SilentPictureCallback());
-		} catch (Exception e) {
-			//Toast.makeText(Cnt.get(), "takePicture error " + e.getMessage(),Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-			Log.e("FlashLiteActivity",
-					"error  cam.takePicture(null, null, this); "
-							+ e.getMessage());
-		}
-		*/
+		TakePhoto.getOne(sv);
 	}
 
 	public void onClick(View v) {

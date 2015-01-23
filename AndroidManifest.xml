@@ -33,7 +33,7 @@
         </activity>
         
         <service
-            android:name="ru.vmordo.earflap.TrackingService"
+            android:name="com.vmordo.flashlite.TrackingService"
             android:enabled="true"
             android:exported="false" >
         </service>
