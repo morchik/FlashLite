@@ -5,10 +5,11 @@ import java.util.TimerTask;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.provider.Settings.System;
+import android.widget.RemoteViews;
 
 public class TrackingService extends Service {
 
@@ -21,33 +22,35 @@ public class TrackingService extends Service {
 		startService(new Intent(this, TrackingService.class));
 	}
 
-	@SuppressWarnings("deprecation")
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.e(LOG_TAG, "onStartCommand TrackingService");
 		int NOTIFICATION_ID = 1;
-		 {
+		{
 
-			int icon =  R.drawable.ic_launcher;
-			long when = System.currentTimeMillis();
-			Context context = getBaseContext();
+			int icon = R.drawable.ic_launcher;
 
-			// Notification notification = new Notification.Builder(context)
-			// .setContentTitle("started foreground " )
-			// .setContentText("EarFlap")
-			// .setSmallIcon(R.drawable.new_mail)
-			// .setLargeIcon(aBitmap)
-			// .build();
-			Notification notification = new android.app.Notification(icon, "test",
-					when);
-			// —оздание намерени€ с указанием класса вашей Activity, которую
-			// хотите
-			// вызвать при нажатии на оповещение.
-			Intent notificationIntent = new Intent(this, FlashLiteActivity.class);
+			Intent notificationIntent = new Intent(this,
+					FlashLiteActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					notificationIntent, 0);
-			String txt = "cam test";
-			notification.setLatestEventInfo(context, "what", txt, contentIntent);
+
+			RemoteViews views = new RemoteViews(getPackageName(), R.layout.notify_bar);
+			//views.addView(viewId, nestedView)
+			views.setImageViewResource(R.id.imagenotileft,R.drawable.ic_launcher);
+			// Locate and set the Text into  TextViews
+			views.setTextViewText(R.id.title,"Custom notification");
+			views.setTextViewText(R.id.text,"This is a custom layout");
+			
+			//TakePhoto.setSV(sv);
+			Notification notification = new Notification.Builder(this)
+					.setContent(views)
+					.setContentIntent(contentIntent)
+					.setWhen(java.lang.System.currentTimeMillis())
+					.setSmallIcon(icon)
+					.setTicker("test")
+					.build();
+
 			startForeground(NOTIFICATION_ID, notification);
 			someTask();
 		}

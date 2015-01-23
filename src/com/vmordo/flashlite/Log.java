@@ -96,10 +96,10 @@ public class Log {
 				File dir = new File(getDir() + "/" + getDateDir());
 				dir.mkdirs();
 				if (dir.exists()) {
-					logFile = dir.getAbsolutePath() + "/log_" + getDay()
+					logFile = dir.getAbsolutePath() + "/log2_" + getDay()
 							+ ".txt";
 				} else {
-					logFile = getDir() + "/log_" + getDay() + ".txt";
+					logFile = getDir() + "/log2_" + getDay() + ".txt";
 				}
 				android.util.Log.e("LLG", logFile);
 			}
