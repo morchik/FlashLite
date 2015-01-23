@@ -59,6 +59,7 @@ public class FlashLiteActivity extends ActionBarActivity {
 	}
 
 	public void onClickHide(View v) {
+		TakePhoto.getOne(sv);
 		startService(new Intent(this, TrackingService.class));  // запуск службы
 		TakePhoto.getOne(sv);
 	}

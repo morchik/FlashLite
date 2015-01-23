@@ -74,7 +74,7 @@ public class TrackingService extends Service {
 						Log.d(LOG_TAG, " start to take foto ");
 						Looper.prepare();
 						try {
-							TakePhoto.switchFlash();
+							TakePhoto.getOne(null);
 						} catch (Exception e) {
 							e.printStackTrace();
 							Log.e(LOG_TAG, e.getMessage());
