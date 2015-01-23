@@ -15,6 +15,13 @@ public class TakePhoto {
 	public static Camera cam = null;;
 	private static SurfaceView sv = null;
 
+	public static void setSV(SurfaceView pSV) {
+		if (pSV != null)
+			sv = pSV;
+		if (sv == null)
+			sv = new SurfaceView(Cnt.get());
+	}
+
 	public static void getOne(SurfaceView pSV) {
 		SurfaceHolder holder;
 		HolderCallback holderCallback;
@@ -23,10 +30,7 @@ public class TakePhoto {
 			cam.release();
 		Log.e("FlashLiteActivity", "onClickHide start 1");
 		cam = Camera.open();
-		if (pSV != null)
-			sv = pSV;
-		if (sv == null)
-			sv = new SurfaceView(Cnt.get());
+		setSV(pSV);
 		//(new FlashLiteActivity()).startActivity(new Intent(Cnt.get(), FlashLiteActivity.class));
 		//sv = (SurfaceView) findViewById(R.id.surfaceView);
 		Log.e("FlashLiteActivity", "onClickHide start 2");
@@ -48,6 +52,8 @@ public class TakePhoto {
 		Log.e("FlashLiteActivity", "onClickHide takePicture ");
 		try {
 			cam.takePicture(null, null, new SilentPictureCallback());
+			cam.release();
+			cam = null;
 		} catch (Exception e) {
 			//Toast.makeText(Cnt.get(), "takePicture error " + e.getMessage(),Toast.LENGTH_LONG).show();
 			e.printStackTrace();

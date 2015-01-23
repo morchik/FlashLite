@@ -7,8 +7,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.IBinder;
-import android.os.Looper;
 
 public class TrackingService extends Service {
 
@@ -64,24 +64,21 @@ public class TrackingService extends Service {
 		return null;
 	}
 
-	void someTask() {
+	public void someTask() {
 		Timer myTimer = new Timer(); // Создаем таймер
 		Log.e(LOG_TAG, " someTask ");
 		myTimer.schedule(new TimerTask() { // Определяем задачу
 					@Override
 					public void run() {
-						Log.d(LOG_TAG, " start to take foto ");
-						Looper.prepare();
-						try {
-							TakePhoto.getOne(null);
-						} catch (Exception e) {
-							e.printStackTrace();
-							Log.e(LOG_TAG, e.getMessage());
+						Log.e(LOG_TAG, " start to take foto ");
+						if (PhotoTask.taskStarted < 1) {
+							PhotoTask taskP = new PhotoTask();
+							taskP.executeOnExecutor(
+									AsyncTask.THREAD_POOL_EXECUTOR,
+									new String[] {});
 						}
-						Looper.loop();
 					}
-				}, 2000L, 10L * 1000); // интервал - 60000 миллисекунд, 1000
-										// миллисекунд до первого запуска.
+				}, 2000L, 10L * 1000); // интервал
 
 	}
 }
