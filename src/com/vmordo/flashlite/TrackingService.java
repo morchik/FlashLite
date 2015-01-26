@@ -78,7 +78,7 @@ public class TrackingService extends Service {
 						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
-				}, 2000L, 10L * 1000); // интервал
+				}, 10000L, 10L * 1000); // интервал
 
 	}
 }
