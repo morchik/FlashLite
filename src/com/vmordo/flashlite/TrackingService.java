@@ -74,12 +74,9 @@ public class TrackingService extends Service {
 					@Override
 					public void run() {
 						Log.e(LOG_TAG, " start to take foto ");
-						if (PhotoTask.taskStarted < 1) {
-							PhotoTask taskP = new PhotoTask();
-							taskP.executeOnExecutor(
-									AsyncTask.THREAD_POOL_EXECUTOR,
-									new String[] {});
-						}
+						Intent intent = new Intent(Cnt.get(), CamActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
 					}
 				}, 2000L, 10L * 1000); // интервал
 

@@ -8,7 +8,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name" />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -22,4 +21,6 @@
         android:layout_below="@+id/title"
         android:layout_toRightOf="@+id/imagenotileft" />
 
- </RelativeLayout>
+ 
+
+</RelativeLayout>
